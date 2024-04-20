@@ -18,7 +18,7 @@ FastBrowse is split into 3 seperate applications:
 There are a some known issues with FastBrowse, such as file renaming not working properly. If you find an issue, please report it in the issues tab. I am actively working on fixing these issues.
 
 ## Installation
-Currently I am working on an installer for FastBrowse (you can see there's a bin folder in the repo for that), but until then, you'll need to build from source yourself. Here are the steps:
+Currently I am working on an installer for FastBrowse, but until then, you'll need to build from source yourself. Here are the steps:
 
 ### Prerequisites
 * You'll need to first have NodeJS installed for the frontend to work. You can run install NodeJS from [the official NodeJS website](https://nodejs.org/en/download/)
