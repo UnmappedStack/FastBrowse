@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastBrowse</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        #header {
+            background-color: black;
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-size: 30px;
+            padding: 10px;
+            color: white;
+            position: fixed;
+            z-index: 1000;
+        }
+        #leftpanel {
+            position: fixed;
+            height: calc(100% - 60px);
+            background-color: #101010;
+            width: 200px;
+            z-index: 500;
+            top: 60px;
+            overflow-y: auto;
+        }
+        #rightpanel {
+            padding: 40px;
+            position: absolute;
+            background-color: #282C35;
+            color: white;
+            left: 200px;
+            width: calc(100% - 200px);
+            right: 0;
+            min-height: 100vh;
+        }
+        .dirbutt {
+            padding: 10px;
+            width: 100%;
+            border: 2px solid black;
+            text-decoration: none;
+            color: black;
+            background-color: white;
+        }
+        button.arrow {
+            font-size: 40px;
+            background-color: transparent;
+            border: 0px;
+            color: white;
+        }
+        #headertable {
+            width: 95%;
+        }
+        button.small {
+            font-size: 30px;
+        }
+        .file {
+            width: 93%;
+            padding: 10px;
+            color: black;
+            background-color: white;
+            border-bottom: 10px solid #282C35;
+        }
+        #searchform {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #searchbox:focus {
+            outline: none;
+        }
+        #searchbox {
+            border-radius: 5px 0px 0px 5px;
+            border: 2px solid black;
+            padding: 10px;
+            width: 70%;
+            max-width: 300px;
+        }
+        #searchsubmit {
+            border-radius: 0px 5px 5px 0px;
+            padding: 10px;
+            border: 2px solid black;
+            background-color: maroon;
+            color: white;
+        }
+        #creditslink {
+            position: absolute;
+            bottom: 1px;
+            left: 50%;
+            color: white;
+            text-decoration: underline;
+            transform: translate(-50%, -50%);
+        }
+        select {
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+        @media only screen and (max-width: 768px) {
+            #leftpanel {
+                display: none;
+            }
+            #rightpanel {
+                margin-left: 0;
+                width: 100%;
+                position: absolute;
+                left: 0px;
+            }
+        }
+        #main {
+            position: absolute;
+            left: 0px;
+            width: 100vw;
+        }
+        #newtypes {
+            opacity: 0%;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #creditsfloat {
+            background-color: white;
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            z-index: 9999999999999999999;
+            display: none;
+            padding: 10px;
+        }
+        #mandirform {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #mandirbox {
+            border-radius: 5px 0px 0px 5px;
+            border: 2px solid black;
+            padding: 10px;
+            width: 70%;
+            max-width: 300px;
+        }
+        #mandirbutt {
+            padding: 10px;
+            border-radius: 0px 5px 5px 0px;
+            border: 2px solid black;
+            background-color: maroon;
+            color: white;
+        }
+    </style>
+    <script src="minor_scripts.js"></script>
+</head>
+<body>
+    <div id="creditsfloat">
+        <span onclick="closecredits();">[X] Close</span>
+        <h2>Open source credits</h2>
+        <p>FastBrowse is a completely open source project under the MIT license, which has mostly been developed by <a href="https://github.com/jakeSteinburger">Jake Steinburger</a>. However, the project does use a couple open-source dependencies which are relied on, and the original developers are appreciated. These projects are:</p>
+        <ul>
+            <li><a href="https://github.com/yhirose/cpp-httplib">cpp-httplib</a>: Web server library for C++ - Used by FastBrowse to communicate between the frontend and backend.</li>
+            <li><a href="https://electronjs.org">Electron</a>: A HTML renderer - Used by FastBrowse to render the GUI.</li>
+          </ul>
+        <br>
+        <p>You can find more information about the FastBrowse project, it's dependencies, and the license, on the FastBrowse Github repository. FastBrowse is mostly developed in C++, however it uses some JavaScript for rendering the frontend GUI. </p>
+    </div>
+    <div id="header">
+        <table id="headertable">
+            <td style="text-align: left;">
+                <b>FastBrowse</b>
+            </td>
+            <td style="display: flex; float: right;">
+                <i id="newtypes">
+                    <button class="arrow small" title="New file" onclick="createFile();"><i class="fa fa-file-o"></i></button>
+                    <button class="arrow small" title="New folder" onclick="createFolder();"><i class="fa fa-folder-o"></i></button>
+                </i>
+                <button class="arrow small" title="Create new..." onclick="toggleShowingExtra();"><i class="fa fa-plus"></i></button>
+                <button class="arrow small" title="Rename" onclick="renameSelected();"><i class="fa fa-edit"></i></button>
+                <button class="arrow small" title="Cut" onclick="cutSelected();"><i class="fa fa-cut"></i></button>
+                <button class="arrow small" title="Copy" onclick="copySelected();"><i class="fa fa-copy"></i></button>
+                <button class="arrow small" title="Paste" onclick="pasteSelected();"><i class="fa fa-paste"></i></button>
+                <button class="arrow small" title="Delete" onclick="deleteSelected();"><i class="fa fa-trash"></i></button>
+                <button class="arrow small" title="Refresh files" onclick="refreshFiles();"><i class="fa fa-refresh"></i></button>
+            </td>
+        </table>
+    </div>
+    <div id="main">
+        <div id="leftpanel">
+            <br><br><br><br>
+            <div class="dirbutt" onclick="openPastUser('Desktop');"><i class="fa fa-desktop"></i> Desktop</div>
+            <div class="dirbutt" onclick="openPastUser('Downloads');"><i class="fa fa-download"></i> Downloads</div>
+            <div class="dirbutt" onclick="openPastUser('Documents');"><i class="fa fa-files-o"></i> Documents</div>
+            <div class="dirbutt" onclick="openPastUser('Pictures');"><i class="fa fa-camera"></i> Photos</div>
+            <div class="dirbutt" onclick="openPastUser('Videos');"><i class="fa fa-photo"></i> Videos</div>
+            <br><br><br>
+            <center>
+                <button class="arrow" onclick="goBack();"><i class="fa fa-arrow-circle-left"></i></button>
+                <button class="arrow" onclick="goForward();"><i class="fa fa-arrow-circle-right"></i></button>
+            </center>
+        </div>
+        <div id="rightpanel">
+            <br><br><br>
+            <center>
+                <div id="mandirform">
+                    <input type="text" id="mandirbox" placeholder="Enter a directory to visit...">
+                    <button id="mandirbutt" onclick="openmandir();">></button>
+                </div><br>
+                <div id="searchform">
+                    <input type="search" id="searchbox" placeholder="Search your files...">
+                    <button id="searchsubmit" onclick="submitSearch();"><i class="fa fa-search"></i></button>
+                </div>
+                Search:
+                <select id="searchScope">
+                    <option value="This folder">This folder</option>
+                    <option value="Whole device">Whole device</option>
+                </select>
+            </center><br><br>
+            <script src="interference_functions.js"></script>
+            <!-- File list -->
+            <div id="filelist"></div>
+            <br>
+            <center>
+                <button onclick="terminalOpenCD();"><b><i class="fa fa-terminal" style="background-color: black; color: green; padding: 2px;"></i></b> Open folder in terminal</button>
+                <span onclick="opencredits();" id="creditslink">Open source credits</span>
+            </center>
+        </div>
+    </div>
+</body>
+</html>
