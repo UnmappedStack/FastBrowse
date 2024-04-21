@@ -1,2 +1,20 @@
-﻿  FastBrowseBackgroundServer.cpp
+﻿  server.cpp
+C:\Users\jaked\source\repos\FastBrowseBackgroundServer\FastBrowseBackgroundServer\server.cpp(102,48): warning C4101: 'ex': unreferenced local variable
+  C:\Users\jaked\source\repos\FastBrowseBackgroundServer\FastBrowseBackgroundServer\server.cpp(102,48):
+  the template instantiation context (the oldest one first) is
+  	C:\Users\jaked\source\repos\FastBrowseBackgroundServer\FastBrowseBackgroundServer\server.cpp(192,28):
+  	see reference to function template instantiation 'std::string retrieveFolder<std::string>(_T0 &)' being compiled
+          with
+          [
+              _T0=std::string
+          ]
+  	C:\Users\jaked\source\repos\FastBrowseBackgroundServer\FastBrowseBackgroundServer\server.cpp(138,12):
+  	see reference to function template instantiation 'std::string checkFolder<_T0>(_T0 &)' being compiled
+          with
+          [
+              _T0=std::string
+          ]
+  
+C:\Users\jaked\source\repos\FastBrowseBackgroundServer\FastBrowseBackgroundServer\server.cpp(129,40): warning C4101: 'ex': unreferenced local variable
+C:\Users\jaked\source\repos\FastBrowseBackgroundServer\FastBrowseBackgroundServer\server.cpp(132,37): warning C4101: 'ex': unreferenced local variable
   FastBrowseBackgroundServer.vcxproj -> C:\Users\jaked\source\repos\FastBrowseBackgroundServer\x64\Debug\FastBrowseBackgroundServer.exe

@@ -203,7 +203,13 @@ void handle_search(const Request& req, Response& res) {
 void handle_searchdevice(const Request& req, Response& res) {
     auto k = req.get_param_value("k"); // Query
     std::string txtfiles;
-    std::ifstream inputFile("filescache.txt");
+    char buffer[MAX_PATH];
+    GetModuleFileNameA(NULL, buffer, MAX_PATH); // Note the 'A' suffix for narrow characters
+    fs::path executablePath = fs::canonical(fs::path(buffer));
+    // Get the directory of the executable
+    fs::path executableDir = executablePath.parent_path();
+    fs::path fullPath = executableDir / "filescache.txt";
+    std::ifstream inputFile(fullPath);
     if (inputFile.is_open()) {
         if (std::getline(inputFile, txtfiles)) {
             std::vector<std::string> allfiles = splitString(txtfiles, "[|filesplit|]");
